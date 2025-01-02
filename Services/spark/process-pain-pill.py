@@ -11,8 +11,8 @@ spark = SparkSession.builder \
 
 # Kafka broker and topics
 kafka_brokers = "192.168.10.139:9093"
-input_topics = "accident-event"
-output_topic = "processed-accident-event"
+input_topics = "pain-pill-event"
+output_topic = "processed-pain-pill-event"
 
 # Read data from Kafka
 raw_stream = spark.readStream \

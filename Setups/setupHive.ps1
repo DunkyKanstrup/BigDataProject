@@ -1,18 +1,17 @@
 #!/bin/bash
 
-/// Todo - Remove postgress part
-
-#Set up PostgreSQL for metastore
-helm install hive-postgresql \
-  --version=12.1.5 \
-  --set auth.username=root \
-  --set auth.password=pwd1234 \
-  --set auth.database=hive \
-  --set primary.extendedConfiguration="password_encryption=md5" \
+# Set up MinIO for S3-compatible object storage
+helm install hive-minio \
+  --set accessKey=admin \
+  --set secretKey=password \
+  --set persistence.size=10Gi \
   --repo https://charts.bitnami.com/bitnami \
-  postgresql
+  minio
 
-#Apply yaml files
+# Wait for MinIO to be ready
+kubectl wait --for=condition=available --timeout=300s deployment/hive-minio
+
+# Apply Hive Metastore and HiveServer2 YAML files
 kubectl apply -f ../Services/hive/hive-metastore.yaml
 kubectl apply -f ../Services/hive/hive.yaml
 
